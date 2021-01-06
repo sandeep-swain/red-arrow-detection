@@ -1,6 +1,7 @@
 import cv2
 import math
 import numpy as np
+import imutils
 
 def getcontours(vdo,th1):
     contours, hierarchy= cv2.findContours(vdo, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -15,6 +16,10 @@ def getcontours(vdo,th1):
          if area>1000:
              cv2.drawContours(th1, contours, -1, (0,255,0), 3)
 
+             #temp
+             (x, y), (MA, ma), theta = cv2.fitEllipse(contour)
+             print (theta)
+
              peri=cv2.arcLength(contour, True)
 
              #print(peri)
@@ -26,6 +31,8 @@ def getcontours(vdo,th1):
              x, y, w, h = cv2.boundingRect(approx)
 
              if objcor ==7:
+
+                 
                  
                  cv2.rectangle(th1,(x,y),(x+w,y+h), (255,0,0),2)
                  #print(approx[0][0][0])
@@ -40,18 +47,17 @@ def getcontours(vdo,th1):
                  endpoint=(int((approx[3][0][0]+approx[4][0][0])/2),int((approx[3][0][1]+approx[4][0][1])/2))
 
                  
-                 th1 = cv2.arrowedLine(th1, endpoint, startpoint, (255,0,0),3)  
+                
 
                  slope=(startpoint[0]-endpoint[0])/(startpoint[1]-endpoint[1])
                  angle= math.degrees(math.atan(slope))
                  print(angle)
                  font= cv2.FONT_HERSHEY_SIMPLEX
-                 cv2.putText(th1, str(angle), (50,50), font, 1, (224,0,0), 2)
+                 cv2.putText(th1, 'angle= '+str(angle), (50,50), font, 1, (224,0,0), 2)
              else:
                  pass
              
-             #print('NUMBER OF CONTOURS= ' +str(len(contours)))
-
+            
              #print(area)
              #print(contour)
     
@@ -89,6 +95,7 @@ while True:
     cv2.imshow("frame", frame)
     #cv2.imshow("mask", mask)
     #cv2.imshow("result", result)
+  
     key= cv2.waitKey(500)
     
     if key== 27:
@@ -96,3 +103,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+

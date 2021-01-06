@@ -1,7 +1,7 @@
 import cv2
 import math
 import numpy as np
-import imutils
+
 
 def getcontours(vdo,th1):
     contours, hierarchy= cv2.findContours(vdo, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -16,13 +16,11 @@ def getcontours(vdo,th1):
          if area>1000:
              cv2.drawContours(th1, contours, -1, (0,255,0), 3)
 
-             #temp
-             (x, y), (MA, ma), theta = cv2.fitEllipse(contour)
-             print (theta)
+             
 
              peri=cv2.arcLength(contour, True)
 
-             #print(peri)
+             
             
 
              approx=cv2.approxPolyDP(contour, 0.02*peri, True)
@@ -47,7 +45,7 @@ def getcontours(vdo,th1):
                  endpoint=(int((approx[3][0][0]+approx[4][0][0])/2),int((approx[3][0][1]+approx[4][0][1])/2))
 
                  
-                
+                 #th1 = cv2.arrowedLine(th1, endpoint, startpoint, (255,0,0),3)  
 
                  slope=(startpoint[0]-endpoint[0])/(startpoint[1]-endpoint[1])
                  angle= math.degrees(math.atan(slope))
@@ -58,6 +56,7 @@ def getcontours(vdo,th1):
                  pass
              
             
+
              #print(area)
              #print(contour)
     
@@ -69,7 +68,6 @@ while True:
     _, frame= cap.read()
     blur=cv2.GaussianBlur(frame, (5,5), 0)
     hsv=cv2.cvtColor(blur,cv2.COLOR_BGR2HSV)
-
 
 
     lower_red=np.array([0,100,100])
@@ -103,4 +101,3 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
